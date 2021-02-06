@@ -52,7 +52,6 @@ if __name__ == '__main__':
 
         if 'open youtube' in command:
             speak('opening youtube')
-            # path = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
             webbrowser.open('youtube.com')
 
         elif 'play' in command:
@@ -91,5 +90,3 @@ if __name__ == '__main__':
             speak('opening brave browser')
             brave_path = path = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
             os.startfile(brave_path)
-
-# wish_me()
