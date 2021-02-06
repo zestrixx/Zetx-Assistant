@@ -6,6 +6,7 @@ import pyaudio
 import wikipedia
 import os
 import random
+import pywhatkit
 
 
 engine = pyttsx3.init('sapi5')
@@ -35,53 +36,60 @@ def take_command():
         audio = r.listen(source)
     try:
         print('Recognising...')
-        query = r.recognize_google(audio, language='en-in')
-        print('You asked for:',query)
+        command = r.recognize_google(audio, language='en-in')
+        command = command.lower()
+        print('You asked for:',command)
     except Exception as e:
         print('Sorry, i did not understand, say that again...')
         speak('Sorry, i did not understand, say that again...')
         return 'None'
-    return query
+    return command
 
 if __name__ == '__main__':
     wish_me()
     while True:
-        query = take_command().lower()
+        command = take_command()
 
-        if 'open youtube' in query:
+        if 'open youtube' in command:
             speak('opening youtube')
+            # path = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
             webbrowser.open('youtube.com')
 
-        elif 'play music' in query:
+        elif 'play' in command:
+            command = command.replace('play', '')
+            speak('playing' + command)
+            pywhatkit.playonyt(command)
+
+        elif 'what' or 'how' or 'why' or 'when' in command:
+            pywhatkit.search(command)
+
+        elif 'play music' in command:
             music_dir = 'D:\\Music'
             songs = os.listdir(music_dir)
             song_items =len(songs)
             rand = random.randint(0, song_items)
-            print(rand)
-            print(songs)
             os.startfile(os.path.join(music_dir, songs[rand]))
 
-        elif 'wikipedia' in query:
+        elif 'wikipedia' in command:
             speak('searching wikipedia')
             query = query.replace('wikipedia', '')
             results = wikipedia.summary(query, sentence=2)
             speak('according to wikipedia,')
             speak(results)
 
-        elif 'stackoverflow' in query:
-            speak('opening youtube')
-            webbrowser.open('youtube.com')
+        elif 'open vs code' in command:
+            speak('opening code')
+            code_path = "C:\\Users\\MAYANK\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe"
+            os.startfile(code_path)
 
-        elif 'vs code' in query:
-            speak('opening youtube')
-            webbrowser.open('youtube.com')
+        elif 'open pycharm' in command:
+            speak('opening pycharm')
+            pycharm_path = "C:\\Program Files\\JetBrains\\PyCharm Community Edition 2020.3.2\\bin\\pycharm64.exe"
+            os.startfile(pycharm_path)
 
-        elif 'pycharm' in query:
-            speak('opening youtube')
-            webbrowser.open('youtube.com')
-
-        elif 'brave browser' in query:
-            speak('opening youtube')
-            webbrowser.open('youtube.com')
+        elif 'open brave' in command:
+            speak('opening brave browser')
+            brave_path = path = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+            os.startfile(brave_path)
 
 # wish_me()
