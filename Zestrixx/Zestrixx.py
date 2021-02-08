@@ -1,13 +1,15 @@
 import pyttsx3
 import datetime
+import requests
 import speech_recognition as sr
 import webbrowser
 import pyaudio
+import pyjokes
 import wikipedia
 import os
 import random
 import pywhatkit
-
+from bs4 import BeautifulSoup
 
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
@@ -21,12 +23,12 @@ def speak(audio):
 def wish_me():
     hour = int(datetime.datetime.now().hour)
     if hour >=0 and hour <12:
-        speak('good morning zestrixx')
+        speak('good morning sir')
     elif hour >=12 and hour<18:
-        speak('good afternoon zestrixx')
+        speak('good afternoon sir')
     else:
-        speak('good evening zestrixx')
-    speak('You need me zes?')
+        speak('good evening sir')
+    speak('what you want me to do for you sir?')
 
 def take_command():
     r = sr.Recognizer()
@@ -59,8 +61,8 @@ if __name__ == '__main__':
             speak('playing' + command)
             pywhatkit.playonyt(command)
 
-        elif 'what' or 'how' or 'why' or 'when' in command:
-            pywhatkit.search(command)
+        # elif 'what' or 'how' or 'why' or 'when' in command:
+        #     pywhatkit.search(command)
 
         elif 'play music' in command:
             music_dir = 'D:\\Music'
@@ -71,8 +73,8 @@ if __name__ == '__main__':
 
         elif 'wikipedia' in command:
             speak('searching wikipedia')
-            query = query.replace('wikipedia', '')
-            results = wikipedia.summary(query, sentence=2)
+            command = command.replace('wikipedia', '')
+            results = wikipedia.summary(command, sentences=2)
             speak('according to wikipedia,')
             speak(results)
 
@@ -90,3 +92,31 @@ if __name__ == '__main__':
             speak('opening brave browser')
             brave_path = path = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
             os.startfile(brave_path)
+
+        if 'whatsapp coders' in command:
+            html = requests.get('https://a2oj.pratikdaigavane.me/ladder4').text
+            soup = BeautifulSoup(html, 'html.parser')
+            questions = soup.find_all('tr')
+            questions = questions[4:]
+            links = []
+            for question in questions:
+                link = question.a['href']
+                links.append(link)
+            pywhatkit.sendwhatmsg_to_group('L0N1yZn9Um36mKqcNg9abW', links[random.randint(0, 100)], 20, 3)
+
+
+
+        elif 'tell a joke' in command:
+            speak('searching joke')
+            joke = pyjokes.get_joke(language='en', category='chuck')
+            speak(joke)
+
+        elif 'thank you' in command:
+            speak('always there for you sir!')
+
+        elif 'how are you' in command:
+            speak('until you left me, I was doing good.')
+
+        elif 'goodbye' in command:
+            speak('goodbye sir! I will miss you!')
+            break
